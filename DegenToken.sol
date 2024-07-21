@@ -3,8 +3,11 @@ pragma solidity ^0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract DegenToken is ERC20, Ownable {
+    using Strings for uint256;
+
     struct Item {
         uint256 cost;
         string description;
@@ -28,6 +31,14 @@ contract DegenToken is ERC20, Ownable {
     function burnTokens(uint256 amount) external {
         require(balanceOf(msg.sender) >= amount, "Insufficient balance");
         _burn(msg.sender, amount);
+    }
+
+    function transferTokens(address to, uint256 amount) public returns (bool) {
+        return transfer(to, amount);
+    }
+
+    function getBalance(address account) public view returns (uint256) {
+        return balanceOf(account);
     }
 
     function redeemItem(string memory itemName) external {
